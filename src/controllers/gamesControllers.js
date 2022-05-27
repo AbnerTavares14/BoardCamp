@@ -37,15 +37,16 @@ export async function createGame(req, res) {
 
 export async function searchGames(req, res) {
     const { name } = req.query;
+    console.log(name);
     try {
         if (name) {
-            const filteredGames = await db.query(`SELECT * FROM games WHERE name LIKE $1%`, [name]);
+            const filteredGames = await db.query(`SELECT * FROM games WHERE name LIKE $1 `, [name + '%']);
             return res.send(filteredGames.rows);
         }
         const games = await db.query(`SELECT * FROM games`);
         res.send(games.rows);
     } catch (err) {
         console.log("Deu erro na busca pelos games", err);
-        res.send(500);
+        res.sendStatus(500);
     }
 }
