@@ -1,5 +1,5 @@
 import db from "../db.js";
-import joi, { func } from "joi";
+import joi from "joi";
 
 export async function createGame(req, res) {
     const { body } = req;
@@ -26,7 +26,7 @@ export async function createGame(req, res) {
             console.log("Nome já existe!");
             return res.sendStatus(409);
         }
-        await db.query(`INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) VALUES ($1, $2, $3, $4, $5)`, [body.name, body.image, body.stockTotal, body.categoryId, body.pricePerDay]);
+        await db.query(`INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1, $2, $3, $4, $5)`, [body.name, body.image, body.stockTotal, body.categoryId, body.pricePerDay]);
         res.sendStatus(201);
     } catch (err) {
         console.log("Deu erro na criação do game", err);
