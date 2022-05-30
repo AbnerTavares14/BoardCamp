@@ -1,32 +1,24 @@
 import db from "../db.js";
-import joi from "joi";
-import dayjs from "dayjs";
-// import joi from '@joi/date';
+import JoiBase from "@hapi/joi";
+import JoiDate from "@hapi/joi-date";
+import dayjs from "dayjs"
 
 export async function createCustomer(req, res) {
     const { body } = req;
-    const customerSchema = joi.object({
-        name: joi.string().required(),
-        phone: joi.string().pattern(/[0-9]{11}/).required(),
-        cpf: joi.string().pattern(/[0-9]{11}/).required(),
-        birthday: joi.string().required()
+    const Joi = JoiBase.extend(JoiDate);
+    const customerSchema = Joi.object({
+        name: Joi.string().required(),
+        phone: Joi.string().pattern(/[0-9]{11}/).required(),
+        cpf: Joi.string().pattern(/[0-9]{11}/).required(),
+        birthday: Joi.date().format('YYYY-MM-DD').required()
     });
     const validation = customerSchema.validate(body, { abortEarly: true });
     if (validation.error) {
         console.log(validation.error.details);
         return res.sendStatus(400);
     }
-    if (!body.birthday) {
-        return res.sendStatus(409);
-    }
-
-    if ((!dayjs(body.birthday).isValid())) {
-        return res.sendStatus(409);
-    }
-
     try {
         const exist = await db.query(`SELECT * FROM customers WHERE cpf= $1`, [body.cpf]);
-        console.log(exist.rows)
         if (exist.rows[0]) {
             return res.sendStatus(409);
         }
@@ -69,11 +61,12 @@ export async function searchCustomer(req, res) {
 export async function updateCustomer(req, res) {
     const { id } = req.params;
     const { body } = req;
-    const customerSchema = joi.object({
-        name: joi.string().required(),
-        phone: joi.string().pattern(/ [0-9] /).min(10).max(11).required(),
-        cpf: joi.string().pattern(/[0-9]{11}/).required(),
-        birthday: joi.string(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/).required()
+    const Joi = JoiBase.extend(JoiDate);
+    const customerSchema = Joi.object({
+        name: Joi.string().required(),
+        phone: Joi.string().pattern(/[0-9]{11}/).required(),
+        cpf: Joi.string().pattern(/[0-9]{11}/).required(),
+        birthday: Joi.date().format('YYYY-MM-DD').required()
     });
     const validation = customerSchema.validate(body, { abortEarly: true });
     if (validation.error) {
