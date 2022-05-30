@@ -37,7 +37,6 @@ export async function createGame(req, res) {
 
 export async function searchGames(req, res) {
     const { name } = req.query;
-    console.log(name);
     try {
         if (name) {
             const filteredGames = await db.query(`SELECT * FROM games WHERE name LIKE $1 `, [name + '%']);
