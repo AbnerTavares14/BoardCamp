@@ -1,7 +1,6 @@
 import db from "../db.js";
 import JoiBase from "@hapi/joi";
 import JoiDate from "@hapi/joi-date";
-import dayjs from "dayjs"
 
 export async function createCustomer(req, res) {
     const { body } = req;

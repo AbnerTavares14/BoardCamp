@@ -81,8 +81,7 @@ export async function listRentals(req, res) {
                 }
 
             })
-        })
-        console.log(resultFinal)
+        });
         res.send(resultFinal);
     } catch (err) {
         console.log("Deu erro na listagem de aluguéis", err);
