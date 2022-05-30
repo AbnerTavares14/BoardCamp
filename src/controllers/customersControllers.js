@@ -5,6 +5,7 @@ import dayjs from "dayjs"
 
 export async function createCustomer(req, res) {
     const { body } = req;
+    console.log(body)
     const Joi = JoiBase.extend(JoiDate);
     const customerSchema = Joi.object({
         name: Joi.string().required(),

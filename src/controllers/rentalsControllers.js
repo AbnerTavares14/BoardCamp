@@ -16,7 +16,7 @@ export async function createRental(req, res) {
     }
     try {
         const result = await db.query(`SELECT "pricePerDay", "stockTotal" FROM  games  WHERE id = $1 `, [body.gameId]);
-        if (result.rows || result.rows.length === result.rows[0].stockTotal) {
+        if (!result.rows || result.rows.length === result.rows[0].stockTotal) {
             return res.sendStatus(400);
         }
         const totalPrice = result.rows[0].pricePerDay * body.daysRented;
@@ -82,6 +82,7 @@ export async function listRentals(req, res) {
 
             })
         })
+        console.log(resultFinal)
         res.send(resultFinal);
     } catch (err) {
         console.log("Deu erro na listagem de aluguéis", err);
